@@ -1,0 +1,15 @@
+<div class="list-of-the-best">
+
+  <div>
+    <p>Filterrro: </p> <input type="text" [(ngModel)]="pharse" placeholder="search">
+  </div>
+
+  <button (click)="changeProperty()">change by Property</button>
+  <button (click)="changeReference()">change by Reference</button>
+  <button (click)="showCopy()">show copy</button>
+
+  <h2>Very cool dudes: </h2>
+  <ul *ngFor="let dude of coolDudes | filterro: pharse ">{{ dude.name }}</ul>
+
+
+</div>
