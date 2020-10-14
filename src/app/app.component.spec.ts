@@ -1,31 +1,77 @@
-import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import {TestBed, async} from '@angular/core/testing';
+import {AppComponent} from './app.component';
+import {FormsModule} from '@angular/forms';
+import {FilterPipe} from './pipes/filter.pipe';
+import {Dude} from './Dude';
+
+const mockArrayOfDudes: Dude[] = [
+  {name: 'Mario', age: 29},
+  {name: 'Luigi', age: 28},
+  {name: 'Aragorn', age: 33},
+  {name: 'Bilbo', age: 69}
+];
+
 
 describe('AppComponent', () => {
+  let fixture;
+  let app;
+
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        FormsModule
+      ],
       declarations: [
-        AppComponent
+        AppComponent,
+        FilterPipe
       ],
     }).compileComponents();
   }));
 
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.debugElement.componentInstance;
+    app.coolDudes = mockArrayOfDudes;
+    fixture.detectChanges();
+  });
+
+
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'sample-rest-app'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('sample-rest-app');
+
+  it('should find dude with the name typed in search box', () => {
+    const hostElement = fixture.nativeElement;
+    const searchBoxInput: HTMLInputElement = hostElement.querySelector('.search-box');
+
+    searchBoxInput.value = 'luigi';
+    searchBoxInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const unorderedListElements: HTMLElement[] = Array.from(hostElement.querySelectorAll('ul'));
+    console.log('unorderedListElements: ', unorderedListElements);
+    expect(unorderedListElements.length).toEqual(1);
+    expect(unorderedListElements[0].textContent).toEqual('Luigi');
+
   });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+
+
+  it('should not find any results', () => {
+    const hostElement = fixture.nativeElement;
+    const searchBoxInput: HTMLInputElement = hostElement.querySelector('.search-box');
+
+    searchBoxInput.value = 'Anakonda';
+    searchBoxInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to sample-rest-app!');
+
+    const unorderedListElements: HTMLElement[] = Array.from(hostElement.querySelectorAll('ul'));
+    console.log('unorderedListElements: (empty?): ', unorderedListElements);
+    expect(unorderedListElements.length).toEqual(0);
+
   });
+
+
 });

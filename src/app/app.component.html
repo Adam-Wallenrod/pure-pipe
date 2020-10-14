@@ -1,7 +1,8 @@
 <div class="list-of-the-best">
 
   <div>
-    <p>Filterrro: </p> <input type="text" [(ngModel)]="pharse" placeholder="search">
+    <p>Filterrro: </p>
+    <input class="search-box" type="text" [(ngModel)]="pharse" placeholder="search">
   </div>
 
   <button (click)="changeProperty()">change by Property</button>
@@ -9,7 +10,7 @@
   <button (click)="showCopy()">show copy</button>
 
   <h2>Very cool dudes: </h2>
-  <ul *ngFor="let dude of coolDudes | filterro: pharse ">{{ dude.name }}</ul>
+  <ul class="dude" *ngFor="let dude of coolDudes | filterro: pharse ">{{ dude.name }}</ul>
 
 
 </div>
